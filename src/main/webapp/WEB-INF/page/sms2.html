@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网建短信平台验证码</title>
+</head>
+<body>
+<div style="margin-left: 30%;margin-top: 20%">
+    手机号：<input type="tel" id="phone" placeholder="请输入手机号" style="width:120px;height:25px"/>
+    <button type="button" onclick="sendMsg()">发送验证码</button><br/>
+    验证码：<input type="text" id="code" placeholder="请输入验证码" style="width:120px;height:25px"/>
+    <button type="button" onclick="checkMsg()">校验验证码</button>
+</div>
+<script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+<script>
+    function sendMsg() {
+        var phone = $('#phone').val();
+        console.log("手机号为：" + phone);
+        $.ajax({
+            type: 'get',
+            async: false,
+            cache: false,
+            url: '/sms2/send',
+            dataType: 'json',
+            data: {
+                phone: phone
+            },
+            success: function(res) {
+                if (res.result === "success") {
+                    alert("验证码发送成功");
+                } else {
+                    alert("验证码发送失败");
+                }
+            },
+            error: function() {
+                alert("服务器错误，请联系管理员");
+            }
+        })
+    }
+
+    function checkMsg() {
+        var code = $('#code').val();
+        var phone = $('#phone').val();
+        console.log("验证码为：" + code);
+        $.ajax({
+            type: 'post',
+            async: false,
+            cache: false,
+            url: '/sms2/checkCode',
+            dataType: 'json',
+            data: {
+                code: code,
+                phone: phone
+            },
+            success: function(res) {
+                if (res.result === "success") {
+                    alert("验证码正确");
+                } else {
+                    alert("验证码不一致");
+                }
+            },
+            error: function() {
+                alert("服务器错误，请联系管理员");
+            }
+        })
+    }
+</script>
+</body>
+</html>

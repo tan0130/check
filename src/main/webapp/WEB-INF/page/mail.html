@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邮件发送</title>
+</head>
+<body>
+    <div style="margin-left: 30%;margin-top: 20%">
+        邮箱：<input type="email" id="email" placeholder="请输入邮箱"/>
+        <button type="button" onclick="send()">发送</button>
+        <span id="content"></span>
+    </div>
+<script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+<script>
+    function send() {
+        var email = $('#email').val();
+        console.log("email:" + email);
+        $.ajax({
+            type: 'get',
+            async: false,
+            cache: false,
+            url: '/mail/send',
+            dataType: 'json',
+            data: {
+                email: email
+            },
+            success: function(res) {
+                if (res.result === "success") {
+                    document.getElementById("content").innerHTML = "邮件发送成功"
+                }
+            },
+            error: function() {
+                alert("服务器错误，请联系管理员");
+            }
+        })
+    }
+</script>
+</body>
+</html>
